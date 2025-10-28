@@ -32,9 +32,30 @@
 </head>
 <body>
   <header>
-    <!-- Logo: assets/logo.png qo'ying -->
-    <img id="logo" src="logo.png" alt="Roshidon FM logo">
+        <img id="logo" src="logo.png" alt="Roshidon FM logo">
     <h1>Roshidon FM</h1>
+</header>
+
+<style>
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        padding: 20px;
+    }
+
+    #logo {
+        width: 80px;
+        height: auto;
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #00ff66;
+        margin: 0;
+    }
+</style>
     <nav>
       <a class="link" href="index.html">Jonli</a>
       <a class="link" href="arxiv.html">Arxiv</a>
@@ -44,7 +65,7 @@
   <main>
     <section class="left card">
       <h3>Jonli efir</h3>
-      <p id="status">Efir holati: <strong id="liveStatus">Tayyor</strong></p>
+      <p id="status">Efir holati: <strong id="liveStatus">On Line </strong></p>
 
       <!-- BU YERGA O'ZGARTIRISH: stream URL qo'ying -->
       <audio id="audioPlayer" controls>
@@ -74,8 +95,8 @@
 
       <div style="margin-top:12px">
         <h4>Aloqa</h4>
-        <p style="margin:4px 0">Тел: <a href="tel:+998900000000" style="color:#9ff">+998 90 000 00 00</a></p>
-        <p style="margin:4px 0">Email: <a href="mailto:contact@roshidon.uz" style="color:#9ff">contact@roshidon.uz</a></p>
+        <p style="margin:4px 0">Тел: <a href="tel:+998 55 801-55-09" style="color:#9ff">+998 55 801-55-09</a></p>
+        <p style="margin:4px 0">Email: <a href="aloqa@roshidonfm.uz" style="color:#9ff">aloqa@roshidonfm.uz</a></p>
       </div>
     </aside>
   </main>
