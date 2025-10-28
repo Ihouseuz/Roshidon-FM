@@ -1,12 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roshidon FM</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Roshidon FM — Jonli efir</title>
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#00b894">
+
+  <style>
+    /* Minimal va mobilga mos uslub */
+    body{margin:0;font-family:Inter,Arial,sans-serif;background:#071226;color:#fff;display:flex;flex-direction:column;min-height:100vh}
+    header{padding:18px;text-align:center}
+    header img{width:90px;height:90px;border-radius:12px;object-fit:cover;border:2px solid rgba(255,255,255,0.06)}
+    h1{margin:8px 0 0;font-size:20px}
+    main{flex:1;display:flex;flex-direction:column;gap:14px;padding:18px;max-width:960px;margin:0 auto;width:100%}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+    .player-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    button{background:#00b894;border:none;padding:10px 12px;border-radius:8px;color:#012;cursor:pointer;font-weight:600}
+    .small{background:transparent;color:#9fb; border:1px solid rgba(255,255,255,0.03); padding:8px;border-radius:8px}
+    audio{width:100%;margin-top:12px}
+    nav{display:flex;gap:12px;justify-content:center;padding-bottom:6px}
+    a.link{color:#9ff;border-bottom:1px dashed rgba(255,255,255,0.06);text-decoration:none;padding-bottom:2px}
+    footer{text-align:center;padding:14px;color:#9aa;font-size:13px}
+    @media(min-width:800px){main{flex-direction:row}}
+    .left{flex:1}.right{width:320px}
+    ul.archive-list{list-style:none;padding:0;margin:0}
+    ul.archive-list li{padding:8px 0;border-bottom:1px dashed rgba(255,255,255,0.03)}
+  </style>
 </head>
 <body>
-  <h1>Welcome to Roshidon FM</h1>
-  <p>Your digital radio journey starts here.</p>
+  <header>
+    <!-- Logo: assets/logo.png qo'ying -->
+    <img id="logo" src="assets/logo.png" alt="Roshidon FM logo">
+    <h1>Roshidon FM</h1>
+    <nav>
+      <a class="link" href="index.html">Jonli</a>
+      <a class="link" href="arxiv.html">Arxiv</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="left card">
+      <h3>Jonli efir</h3>
+      <p id="status">Efir holati: <strong id="liveStatus">Tayyor</strong></p>
+
+      <!-- BU YERGA O'ZGARTIRISH: stream URL qo'ying -->
+      <audio id="audioPlayer" controls>
+        <source id="streamSource" src="https://roshidonfm.uz/stream" type="audio/mpeg">
+        Brauzeringiz audio o‘ynatishni qo‘llab-quvvatlamaydi.
+      </audio>
+
+      <div style="margin-top:10px" class="player-controls">
+        <button id="playBtn">Play</button>
+        <button id="pauseBtn" class="small">Pause</button>
+        <button id="muteBtn" class="small">Mute</button>
+        <label style="margin-left:6px;color:#9aa">Volume</label>
+        <input id="vol" type="range" min="0" max="1" step="0.01" value="1" style="width:120px;margin-left:8px">
+      </div>
+
+      <h4 style="margin-top:14px">Endi eshitilmoqda</h4>
+      <p id="nowPlaying">—</p>
+    </section>
+
+    <aside class="right card">
+      <h4>Arxivdan so‘nggi efirlar</h4>
+      <ul id="archiveList" class="archive-list">
+        <li>2025-10-01 — Suhbat: Rishtonda nima gap</li>
+        <li>2025-09-28 — Musiqa marafoni</li>
+        <li>2025-09-20 — Intervyu: Mehmon</li>
+      </ul>
+
+      <div style="margin-top:12px">
+        <h4>Aloqa</h4>
+        <p style="margin:4px 0">Тел: <a href="tel:+998900000000" style="color:#9ff">+998 90 000 00 00</a></p>
+        <p style="margin:4px 0">Email: <a href="mailto:contact@roshidon.uz" style="color:#9ff">contact@roshidon.uz</a></p>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="card">© <span id="year"></span> Roshidon FM — Barcha huquqlar himoyalangan</footer>
+
+<script>
+  // JavaScript: oddiy pleyer boshqaruv va demo "now playing"
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const audio = document.getElementById('audioPlayer');
+  const playBtn = document.getElementById('playBtn');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const muteBtn = document.getElementById('muteBtn');
+  const vol = document.getElementById('vol');
+  const now = document.getElementById('nowPlaying');
+  playBtn.addEventListener('click', async () => { try{ await audio.play(); }catch(e){ alert('Efirni boshlashga ruxsat berilmagan — brauzer autoplay cheklovlari bo‘lishi mumkin. Iltimos Play tugmasini yana bosing.'); }});
+  pauseBtn.addEventListener('click', ()=> audio.pause());
+  muteBtn.addEventListener('click', ()=> { audio.muted = !audio.muted; muteBtn.textContent = audio.muted ? 'Unmute' : 'Mute'; });
+  vol.addEventListener('input', (e)=> audio.volume = e.target.value);
+
+  // Demo: har 10 soniyada "now playing"ni o'zgartiradi (haqiqiy halda server metadata talab qilinadi)
+  const demo = ['DJ — Morning Show','Top 40 — Musiqa', 'Intervyu — Mehmon'];
+  let di = 0;
+  setInterval(()=>{ now.textContent = demo[di]; di = (di+1)%demo.length; },10000);
+
+  // Agar kerak bo'lsa stream metadata olish (Icecast/SHOUTcast) uchun server-side proxy talab qilinadi.
+</script>
+
+<!-- Service worker ro'yxatdan o'tkazish (PWA o'rnatish uchun) -->
+<script>
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').catch(()=>{ /* ishlamasa tinch */ });
+  }
+</script>
 </body>
 </html>
